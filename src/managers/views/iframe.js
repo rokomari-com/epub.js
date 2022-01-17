@@ -91,9 +91,10 @@ class IframeView {
 
 		// sandbox
 		this.iframe.sandbox = "allow-same-origin";
-		if (this.settings.allowScriptedContent) {
-			this.iframe.sandbox += " allow-scripts"
-		}
+		this.iframe.sandbox += " allow-scripts"
+		// if (this.settings.allowScriptedContent) {
+			
+		// }
 
 		this.iframe.setAttribute("enable-annotation", "true");
 
