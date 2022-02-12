@@ -120,12 +120,13 @@
 				// Listen for location changed event, get percentage from CFI
 				rendition.on('relocated', function(location){
 						var percent = book.locations.percentageFromCfi(location.start.cfi);
+
 						var percentage = Math.floor(percent * 100);
 						if(!mouseDown) {
 								slider.value = percentage;
 						}
 						currentPage.value = percentage;
-						console.log(location);
+						console.log(book);
 				});
 
 				// Save out the generated locations to JSON
