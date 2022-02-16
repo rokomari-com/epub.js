@@ -264,11 +264,6 @@ class Book {
 			this.url = new Url("/", "");
 			opening = this.request(input, "binary", this.settings.requestCredentials, this.settings.requestHeaders)
 				.then(this.openEpub.bind(this));
-		} else if (type === INPUT_TYPE.ENCODED) {
-			this.archived = true;
-			this.url = new Url("/", "");
-			opening = this.request(input, "binary", this.settings.requestCredentials, this.settings.requestHeaders)
-				.then(this.openEncodedEpub.bind(this));
 		} else if(type == INPUT_TYPE.OPF) {
 			this.url = new Url(input);
 			opening = this.openPackaging(this.url.Path.toString());
@@ -282,55 +277,6 @@ class Book {
 		}
 
 		return opening;
-	}
-
-	
-	decrypt(data) {
-		var key = "1234567887654321";  
-		const blob = new Blob([data], {type: 'text/plain; charset=utf-8'});
-	
-		return blob.text().then(async (tt) => {
-		  var decrypted = cryptoJs.AES.decrypt(tt, key);               // Decryption: I: Base64 encoded string (OpenSSL-format) -> O: WordArray
-		  var typedArray = this.convertWordArrayToUint8Array(decrypted);               // Convert: WordArray -> typed array
-	  
-		  var fileDec = new Blob([typedArray]);       
-			  
-		  return fileDec.arrayBuffer().then(ab => {
-			return Promise.resolve((ab))
-		  })
-		})
-	}
-	
-	convertWordArrayToUint8Array(wordArray) {
-	  var arrayOfWords = wordArray.hasOwnProperty("words") ? wordArray.words : [];
-	  var length = wordArray.hasOwnProperty("sigBytes") ? wordArray.sigBytes : arrayOfWords.length * 4;
-	  var uInt8Array = new Uint8Array(length), index=0, word, i;
-	  for (i=0; i<length; i++) {
-		  word = arrayOfWords[i];
-		  uInt8Array[index++] = word >> 24;
-		  uInt8Array[index++] = (word >> 16) & 0xff;
-		  uInt8Array[index++] = (word >> 8) & 0xff;
-		  uInt8Array[index++] = word & 0xff;
-	  }
-	  return uInt8Array;
-	}
-
-	/**
-	 * Open an encrypted epub
-	 * @private
-	 * @param  {binary} data
-	 * @param  {string} [encoding]
-	 * @return {Promise}
-	 */
-	 openEncodedEpub(data, encoding) {
-		this.decrypt(data).then(tt => {
-			console.log('i am', tt)
-			return this.unarchive(tt, encoding || this.settings.encoding).then(() => {
-			  return this.openContainer(CONTAINER_PATH);
-			}).then(packagePath => {
-			  return this.openPackaging(packagePath);
-			});
-		  })
 	}
 
 	/**
