@@ -80,10 +80,11 @@ class Packaging {
 	 */
 	parseMetadata(xml){
 		var metadata = {};
-
+		console.log(xml)
 		metadata.title = this.getElementText(xml, "title");
 		metadata.creator = this.getElementText(xml, "creator");
 		metadata.description = this.getElementText(xml, "description");
+		metadata.isBijoy = this.getElementText(xml, "bijoy") === "True";
 
 		metadata.pubdate = this.getElementText(xml, "date");
 
