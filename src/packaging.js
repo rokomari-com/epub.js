@@ -84,6 +84,7 @@ class Packaging {
 		metadata.creator = this.getElementText(xml, "creator");
 		metadata.description = this.getElementText(xml, "description");
 		metadata.isBijoy = this.getElementText(xml, "bijoy") === "True";
+		metadata.isFixedLayout = this.getElementText(xml, "isFixedLayout") === "True";
 
 		metadata.pubdate = this.getElementText(xml, "date");
 
